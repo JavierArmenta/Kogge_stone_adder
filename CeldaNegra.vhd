@@ -38,8 +38,8 @@ end CeldaNegra;
 architecture Behavioral of CeldaNegra is
 signal s1,s2: std_logic;
 begin
-u1: MULT_AND port  map (S1,y1,x2);
+u1: MULT_AND port  map (S1,y1,x1);
 u2: MULT_AND port  map (S2,y1,y2);
-x12 <= x1 or s1;
+x12 <= x2 or s1;
 y12 <= s2;
 end Behavioral;
