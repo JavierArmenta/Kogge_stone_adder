@@ -45,7 +45,7 @@ component CeldaNegra port( x1,y1,x2,y2: in std_logic;
  x12,y12: out std_logic);
 end component;
 
-type arreglo is array (0 to 3) of std_logic_vector (9 downto 0); --renglones, columna
+type arreglo is array (0 to 4) of std_logic_vector (9 downto 0); --renglones, columna
 signal P,G: arreglo;
 
 
@@ -57,39 +57,72 @@ PG_logic : for i in 7 downto 0 generate
 	u2: XORCY port map (p(0)(i+1),y(i),x(i));
 	end generate;
 g(0)(0)<='0';
+
+---------------------------------------------------------------------- primer renglon de la logica kogge-stone
 gris1: CeldaGris port map (g(0)(1),p(0)(1),g(0)(0),g(1)(1));
 
-primer_vector_negro : for i in 8 downto 2 generate 
-begin
-negro1: CeldaNegra port map (g(0)(i),p(0)(i),g(0)(i-1),p(0)(i-1),g(1)(i),p(1)(i)); 	
-end generate;
+negro1: CeldaNegra port map (g(0)(2),p(0)(2),g(0)(1),p(0)(1),g(1)(2),p(1)(2));
 
-segundo_vector_gris : for i in 3 downto 2 generate 
-begin 
-gris2: CeldaGris port map (g(1)(i),p(1)(i),g(3)(i-2),g(2)(i));
-end generate;
+negro2: CeldaNegra port map (g(0)(3),p(0)(3),g(0)(2),p(0)(2),g(1)(3),p(1)(3));
 
-segundo_vector_negro : for i in 8 downto 4 generate
-begin 
-negro2: CeldaNegra port map (g(1)(i),p(1)(i),g(1)(i-2),p(1)(i-2),g(2)(i),p(2)(i));
-end generate;
+negro3: CeldaNegra port map (g(0)(4),p(0)(4),g(0)(3),p(0)(3),g(1)(4),p(1)(4));
 
-tercer_vector_gris : for i in 3 downto 0 generate 
-begin 
-gris3: CeldaGris port map ( g(2)(i+4),p(2)(i+4),g(3)(i),g(3)(i+4));
-end generate;
-g(3)(0)<=g(0)(0);
-g(1)(0)<=g(0)(0);
-g(2)(0)<=g(0)(0);
-g(2)(1)<=g(1)(1);
-g(3)(1)<=g(1)(1);
-g(3)(2)<=g(2)(2);
-g(3)(3)<=g(2)(3);
-salida(8)<=g(0)(7)or( p(0)(7)and g(3)(6));
-Logica_salida : for i in 7 downto 0 generate 
-begin
---salida(i)<=g(3)(i);
-u3: XORCY port map (salida(i),p(0)(i+1),g(3)(i));
-end generate; 
+negro4: CeldaNegra port map (g(0)(5),p(0)(5),g(0)(4),p(0)(4),g(1)(5),p(1)(5));
+
+negro5: CeldaNegra port map (g(0)(6),p(0)(6),g(0)(5),p(0)(5),g(1)(6),p(1)(6));
+
+negro6: CeldaNegra port map (g(0)(7),p(0)(7),g(0)(6),p(0)(6),g(1)(7),p(1)(7));
+
+negro7: CeldaNegra port map (g(0)(8),p(0)(8),g(0)(7),p(0)(7),g(1)(8),p(1)(8));
+-------------------------------------------------------------------------^^^^^^^^^^^^
+
+
+Gris1Renglon2 : CeldaGris port map (g(1)(2),p(1)(2),g(0)(0),g(2)(2));
+
+Gris2Renglon2 : CeldaGris port map (g(1)(3),p(1)(3),g(1)(1),g(2)(3));
+
+Negra1Renglon2 : CeldaNegra port map (g(1)(4),p(1)(4),g(1)(2),p(1)(2),g(2)(4),p(2)(4));
+
+Negra2Renglon2 : CeldaNegra port map (g(1)(5),p(1)(5),g(1)(3),p(1)(3),g(2)(5),p(2)(5));
+
+Negra3Renglon2 : CeldaNegra port map (g(1)(6),p(1)(6),g(1)(4),p(1)(4),g(2)(6),p(2)(6));
+
+Negra4Renglon2 : CeldaNegra port map (g(1)(7),p(1)(7),g(1)(5),p(1)(5),g(2)(7),p(2)(7));
+
+Negra5Renglon2 : CeldaNegra port map (g(1)(8),p(1)(8),g(1)(6),p(1)(6),g(2)(8),p(2)(8));
+
+----------------------------------------------------------------------------------------------------
+
+Gris1Renglon3 : CeldaGris port map (g(2)(4),p(2)(4),g(0)(0),g(3)(4));
+
+Gris2Renglon3 : CeldaGris port map (g(2)(5),p(2)(5),g(1)(1),g(3)(5));
+
+Gris3Renglon3 : CeldaGris port map (g(2)(6),p(2)(6),g(2)(2),g(3)(6));
+
+Gris4Renglon3 : CeldaGris port map (g(2)(7),p(2)(7),g(2)(3),g(3)(7));
+
+Negra1Renglon3 : CeldaNegra port map (g(2)(8),p(2)(8),g(2)(4),p(2)(4),g(3)(8),p(3)(8));
+
+-----------------------------------------------------------------------------------------------------
+
+Gris1Renglon4 : CeldaGris port map (g(3)(8),p(3)(8),g(0)(0),g(4)(8));
+
+
+s0: XORCY port map (salida(0),p(0)(1),g(0)(0));
+s1: XORCY port map (salida(1),p(0)(2),g(1)(1));
+s2: XORCY port map (salida(2),p(0)(3),g(2)(2));
+s3: XORCY port map (salida(3),p(0)(4),g(2)(3));
+s4: XORCY port map (salida(4),p(0)(5),g(3)(4));
+s5: XORCY port map (salida(5),p(0)(6),g(3)(5));
+s6: XORCY port map (salida(6),p(0)(7),g(3)(6));
+s7: XORCY port map (salida(7),p(0)(8),g(3)(7));
+
+u5: MULT_AND port  map (g(4)(0),p(0)(8),g(3)(7));
+u6: xorcy port map (salida(8),g(4)(0),g(0)(8));
+
+--begin
+----salida(i)<=g(3)(i);
+--u3: XORCY port map (salida(i),p(0)(i+1),g(3)(i));
+--end generate; 
 end Behavioral;
 
