@@ -23,21 +23,23 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
-
+use IEEE.NUMERIC_STD.all;
 -- Uncomment the following library declaration if instantiating
 -- any Xilinx primitives in this code.
 library UNISIM;
 use UNISIM.VComponents.all;
-
+use IEEE.std_logic_unsigned.all;
 entity sumador is
 port( x,y: in std_logic_vector(7 downto 0);
-	salida: out STD_LOGIC_vector (8 downto 0));
+	salida: out STD_LOGIC_vector (8 downto 0);
+	salida2: out STD_LOGIC_VECTOR (7 downto 0));
 end sumador;
 
 architecture Behavioral of sumador is
 
 
 component CeldaGris port( x1,y1,x2: in std_logic; --p y g actuales y g anterior 
+									
  x12: out std_logic);
 end component;
 
@@ -56,11 +58,11 @@ PG_logic : for i in 7 downto 0 generate
 	u1: MULT_AND port  map (g(0)(i+1),y(i),x(i));
 	u2: XORCY port map (p(0)(i+1),y(i),x(i));
 	end generate;
-g(0)(0)<='0';
+g(0)(0)<='1';
 
 ---------------------------------------------------------------------- primer renglon de la logica kogge-stone
 gris1: CeldaGris port map (g(0)(1),p(0)(1),g(0)(0),g(1)(1));
-
+-- 									--x1  y1      x2       x12
 negro1: CeldaNegra port map (g(0)(2),p(0)(2),g(0)(1),p(0)(1),g(1)(2),p(1)(2));
 
 negro2: CeldaNegra port map (g(0)(3),p(0)(3),g(0)(2),p(0)(2),g(1)(3),p(1)(3));
@@ -119,6 +121,11 @@ s7: XORCY port map (salida(7),p(0)(8),g(3)(7));
 
 u5: MULT_AND port  map (g(4)(0),p(0)(8),g(3)(7));
 u6: xorcy port map (salida(8),g(4)(0),g(0)(8));
+
+
+salida2 <= x + y + '1';
+
+
 
 --begin
 ----salida(i)<=g(3)(i);

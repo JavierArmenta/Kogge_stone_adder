@@ -36,7 +36,9 @@ end CeldaGris;
 architecture Behavioral of CeldaGris is
 signal S :std_logic;
 begin 
-u1: MULT_AND port  map (S,y1,x1);
-x12 <= x2 or s;
+u1: MULT_AND port  map (S,y1,x2);
+u3: MUXCY  port map (x12,x1,s,x1);
+
+--x12 <= x1 or s;
 end Behavioral;
 
